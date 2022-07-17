@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+const config = require('../utils/config')
 
-const url = process.env.MONGODB_URI
+const url = config.MONGODB_URI
 
 mongoose.connect(url)
   // eslint-disable-next-line no-unused-vars
@@ -15,7 +16,7 @@ const blogSchema = new mongoose.Schema({
     title: String,
     author: String,
     url: String,
-    likes: Number
+    likes: {type: Number, default: 0}
   })
   
 blogSchema.set('toJSON', {
