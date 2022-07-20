@@ -32,12 +32,12 @@ const nonExistingId = async () => {
 }
 
 const blogsInDb = async () => {
-    const blogs = await blog.find({})
+    const blogs = await blog.find({}).populate('user', { username: 1, name: 1})
     return blogs.map(blog => blog.toJSON())
 }
 
 const usersInDb = async () => {
-    const users = await user.find({})
+    const users = await user.find({}).populate('blogs', { title: 1, author: 1, url: 1})
     return users.map(user => user.toJSON())
 }
 

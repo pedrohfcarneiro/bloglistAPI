@@ -13,9 +13,18 @@ mongoose.connect(url)
   })
 
   const userSchema = new mongoose.Schema({
-    username: String,
+    username: {
+      type: String,
+      minLength: 3,
+    },
     name: String,
-    passwordHash: String 
+    passwordHash: String,
+    blogs: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Blog'
+      }
+    ]
   })
 
   userSchema.set('toJSON', {
@@ -23,6 +32,7 @@ mongoose.connect(url)
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
+        delete returnedObject.passwordHash
     }
 })
 

@@ -15,6 +15,13 @@ usersRouter.post('/', async (request,response,next) => {
             })
         }
 
+        //validate password
+        if(!(/(?=.{3,})/.test(password))) {
+            return response.status(400).json({
+                error: 'password must be at least 3 characters long'
+            })
+        }
+
         if(username && name && password) {
             const saltRounds = 10
             const passwordHash = await bcrypt.hash(password, saltRounds)
@@ -39,7 +46,7 @@ usersRouter.post('/', async (request,response,next) => {
     }
 })
 
-usersRouter.get('/', async () => {
+usersRouter.get('/', async (request, response, next) => {
     try {
         const currentUsers = await helper.usersInDb()
         if(currentUsers)
