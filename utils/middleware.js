@@ -25,6 +25,20 @@ const errorHandler = (error, request, response, next) => {
     next(error)
 }
 
+const tokenExtractor = (request, response, next) => {
+    const authorization = request.get('authorization')
+    if(!(authorization && authorization.toLowerCase().startsWith('bearer '))) {
+        request.token = null
+    }
+    else {
+        console.log('request has authorization header and middleware passed')
+        //console.log(authorization.substring(7))
+        request.token =  authorization.substring(7)
+    }
+    //console.log(request.token)
+    next()
+}
+
 module.exports = {
-    requestLogger, unknownEndpoint, errorHandler
+    requestLogger, unknownEndpoint, errorHandler, tokenExtractor
 }
