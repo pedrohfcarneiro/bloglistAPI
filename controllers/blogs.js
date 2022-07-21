@@ -21,15 +21,8 @@ blogsRouter.get('/', async (request, response, next) => {
 blogsRouter.post('/', async (request, response, next) => {
   try {
     const body = request.body
-    //validate authorization token
-    //const token = helper.getTokenFrom(request)
-    //console.log(request.body)
-    //console.log(request.token)
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if(!decodedToken.id) {
-      return response.status(401).json({ error: 'token missing or invalid' })
-    }
-    const user = await User.findById(decodedToken.id)
+    
+    const user = request.user
     
     //if passed a valid user authentication token -> continues with adding blog
 
@@ -71,12 +64,26 @@ blogsRouter.put('/:id', async (request, response, next) => {
 })
 
 blogsRouter.delete('/:id', async (request, response, next) => {
-  try {
-    const result = await Blog.findByIdAndDelete(request.params.id)
-    response.status(204).end(JSON.stringify(result))
-  } catch (error) {
-    next(error)
-  }
+    try {
+
+      //validate authorization token
+      const decodedToken = jwt.verify(request.token, process.env.SECRET)
+      if(!decodedToken.id) {
+        return response.status(401).json({ error: 'token missing or invalid' })
+      }
+      const user = await User.findById(decodedToken.id)
+      
+      //validate if the user is the owner
+      const blogToDelete = await Blog.findById(request.params.id)
+      if(!(blogToDelete.user.toString() === user.id.toString())) {
+        return response.status(401).json({ error: 'user is not owner of this blog' })
+      }
+      const result = await Blog.findByIdAndDelete(request.params.id)
+      response.status(204).end(JSON.stringify(result))
+    } catch (error) {
+      next(error)
+    }
 })
+
 
 module.exports = blogsRouter

@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNvbmluaGFyYWlvbGFzZXIiLCJpZCI6IjYyZDg0ZDRhZTlhMjc3YThjNTRmZTBhZSIsImlhdCI6MTY1ODM0NzgxNH0.oVxoB10GLX6OAPlsjsSBIQ_uRZN14vRRnJuNKv5khP0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFnb3JhdmFpIiwiaWQiOiI2MmQ4YTgwMzZmNzE1NTU0NGNlNmEyMmYiLCJpYXQiOjE2NTgzNjYwMDV9.r8sHD58xgmfC3HCWYPomWl6sMe6q3WJsMBh7BPClaTE
 
 {
-    "title": "sample",
-    "author": "Wed, 21 Oct 2015 18:27:50 GMT",
+    "title": "sample2",
+    "author": "agora vai",
     "url": "some http:// url",
-    "likes": 5
+    "likes": 2
 }
