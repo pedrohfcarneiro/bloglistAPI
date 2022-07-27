@@ -58,4 +58,19 @@ usersRouter.get('/', async (request, response, next) => {
     }
 })
 
+usersRouter.get('/getByUsername/:username', async (request, response, next) => {
+    console.log(request.params.username)
+    try {
+        const userList = await User.find({'username': request.params.username})
+        const user = userList[0]
+        console.log(user.toJSON())
+        if(user)
+            response.json(user.toJSON())
+        else
+            response.status(404).end()
+    } catch (error) {
+        next(error)
+    }
+})
+
 module.exports = usersRouter

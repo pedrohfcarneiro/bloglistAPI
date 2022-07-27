@@ -2,7 +2,6 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const helper = require('../utils/list_helper')
-const jwt = require('jsonwebtoken')
 
 
 blogsRouter.get('/', async (request, response, next) => {
@@ -16,6 +15,35 @@ blogsRouter.get('/', async (request, response, next) => {
     next(error)
   }
     
+})
+
+blogsRouter.get('/:id', async (request, response, next) => {
+  try {
+    const blogs = await Blog.findById(request.params.id)
+    console.log(blogs)
+    const blogsJSON = blogs.toJSON()
+    if(blogsJSON)
+      response.json(blogsJSON)
+    else
+      response.status(404).end()
+  } catch (error) {
+    next(error)
+  }
+})
+
+blogsRouter.get('/ByUserId/:userId', async (request, response, next) => {
+  console.log(request.params.username)
+  try {
+    const blogs = await Blog.find({ 'user': request.params.userId}).populate('user', { username: 1, name: 1})
+    console.log(blogs)
+    const blogsJSON = blogs.map(blog => blog.toJSON())
+    if(blogsJSON)
+      response.json(blogsJSON)
+    else
+      response.status(404).end()
+  } catch (error) {
+    next(error)
+  }
 })
 
 blogsRouter.post('/', async (request, response, next) => {
