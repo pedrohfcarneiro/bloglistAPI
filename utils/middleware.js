@@ -42,13 +42,21 @@ const tokenExtractor = (request, response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if(!decodedToken.id) {
-      return response.status(401).json({ error: 'token missing or invalid' })
+    console.log(request.token)
+    if(request.token){
+        try {
+            const decodedToken = jwt.verify(request.token, process.env.SECRET)
+            if(!decodedToken.id) {
+                return response.status(401).json({ error: 'token missing or invalid' })
+            }
+            const user = await User.findById(decodedToken.id)
+            request.user = user
+        } catch (error) {
+            next(error)
+        }
     }
-    const user = await User.findById(decodedToken.id)
-    request.user = user
-    next()
+    else
+        next()
 }
 
 module.exports = {
